@@ -1,0 +1,20 @@
+
+
+Version:	3.50
+CmdLine:	C:\Users\Stas\IdeaProjects\untitledTest\out\artifacts\untitledTest_jar2\TEST0.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	C:\Users\Stas\IdeaProjects\untitledTest\out\artifacts\untitledTest_jar2\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+Substitute:	JAVA_HOME = 
+Substitute:	PATH = C:\Program Files\Java\jdk-20\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;C:\Program Files\IVI Foundation\VISA\Win64\Bin\;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:\Program Files\Git\cmd;C:\Users\Stas\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Program Files\Java\jdk-20\bin;C:\Users\Stas\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\Stas\AppData\Local\Programs\Python\Python311\;C:\MinGW\bin\;C:\MinGW\msys\1.0\bin\;C:\Users\Станислав\AppData\Local\Microsoft\WindowsApps;D:\python_work\PyCharm Community Edition 2021.2\bin;D:\КУРСЫ\П.О. и прочее\Microsoft VS Code\bin;C:\Users\Станислав\AppData\Roaming\npm;C:\Users\Stas\AppData\Local\gitkraken\bin;C:\Users\Stas\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Stas\AppData\Roaming\npm;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.1\bin;;C:\Users\Stas\.dotnet\tools;;C:\Program Files\Java\jdk-20\bin
+JRE paths:	;C:\Program Files\Java\jdk-20\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;C:\Program Files\IVI Foundation\VISA\Win64\Bin\;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:\Program Files\Git\cmd;C:\Users\Stas\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Program Files\Java\jdk-20\bin;C:\Users\Stas\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\Stas\AppData\Local\Programs\Python\Python311\;C:\MinGW\bin\;C:\MinGW\msys\1.0\bin\;C:\Users\Станислав\AppData\Local\Microsoft\WindowsApps;D:\python_work\PyCharm Community Edition 2021.2\bin;D:\КУРСЫ\П.О. и прочее\Microsoft VS Code\bin;C:\Users\Станислав\AppData\Roaming\npm;C:\Users\Stas\AppData\Local\gitkraken\bin;C:\Users\Stas\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Stas\AppData\Roaming\npm;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.1\bin;;C:\Users\Stas\.dotnet\tools;;C:\Program Files\Java\jdk-20\bin;C:\Users\Stas\Downloads\javafx-sdk-20.0.1\lib
+Check launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe (OK)
+Version string: 1.020.000_001 / 64-Bit (OK)
+Launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe
+Launcher args:	-jar "C:\Users\Stas\IdeaProjects\untitledTest\out\artifacts\untitledTest_jar2\TEST0.exe"
+Args length:	88/32768 chars
+Exit code:	0

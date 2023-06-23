@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="untitledTest:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/untitledTest_jar2</output-path>
+    <root id="root">
+      <element id="archive" name="untitledTest.jar">
+        <element id="module-output" name="untitledTest" />
+      </element>
+    </root>
+  </artifact>
+</component>
