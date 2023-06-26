@@ -22,6 +22,7 @@ import java.io.*;
 
 import javafx.scene.layout.VBox;
 
+import javax.swing.filechooser.FileSystemView;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -83,7 +84,7 @@ public class MyApplication extends Application {
 
 
 
-    public static void downloadFile(String fileUrl, String destinationPath, Label label) throws IOException {
+    public static void downloadFile(String fileUrl, String destinationPath, Label label, HBox statusBox, Stage primaryStage, WebView webView) throws IOException {
         URL url = new URL(fileUrl);
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         int responseCode = httpConn.getResponseCode();
@@ -101,7 +102,8 @@ public class MyApplication extends Application {
 
             try {
                 assert filename != null;
-                String file = getSubstringAfterLastSpace(URLDecoder.decode(filename, StandardCharsets.UTF_8));
+                String file = URLDecoder.decode(filename, StandardCharsets.UTF_8);
+//                String file = getSubstringAfterLastSpace(URLDecoder.decode(filename, StandardCharsets.UTF_8));
 
 
                 label.setText("файл - "+file);
@@ -112,15 +114,21 @@ public class MyApplication extends Application {
                 byte[] buffer = new byte[4096];
                 int bytesRead = -1;
                 long totalBytesRead = 0;
+
+                statusBox.setVisible(true);
+                statusBox.setManaged(true);
+                webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty());
+
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
 //                    String allMsgs = label.getText();
-                    label.setText("файл - "+file+"\nЗагрузка"+Long.toString(totalBytesRead)+" byte.");
+                    label.setText("файл - "+file+" Загружено "+Long.toString(totalBytesRead)+" байт.");
                     totalBytesRead += bytesRead;
 
                     double progress = (double) totalBytesRead / contentLength;
                     updateProgress(progress);
                 }
+                label.setText("файл "+file+" Сохранен в "+destinationPath);
 
                 outputStream.close();
                 inputStream.close();
@@ -134,7 +142,7 @@ public class MyApplication extends Application {
     }
 
 
-    public void createScene(Stage primaryStage, WebView webView, Button button, Label statusLabel) {
+    public void createScene(Stage primaryStage, WebView webView, Button button, Label statusLabel, HBox statusBox) {
         // Определяем соотношение размеров
         final double webViewHeightRatio = 0.9;
         final double statusBoxHeightRatio = 0.1;
@@ -144,8 +152,8 @@ public class MyApplication extends Application {
         vbox.setAlignment(Pos.CENTER);
 
         // Создаем HBox для строки состояния
-        HBox statusBox = new HBox();
-        statusBox.setStyle("-fx-background-color: green;");
+//        HBox statusBox = new HBox();
+//        statusBox.setStyle("-fx-background-color: green;");
         statusBox.setAlignment(Pos.CENTER_RIGHT);
 
         // Устанавливаем привязку высоты и ширины WebView к высоте и ширине primaryStage
@@ -156,11 +164,13 @@ public class MyApplication extends Application {
         double statusBoxHeight = primaryStage.getHeight() * statusBoxHeightRatio;
         statusBox.prefHeightProperty().setValue(statusBoxHeight);
 
+        System.out.println(primaryStage.getHeight());
+
         // Разбиваем statusBox на два HBox поменьше
         HBox leftBox = new HBox();
         HBox.setHgrow(leftBox, Priority.ALWAYS); // Добавляем растяжение по горизонтали
         leftBox.getChildren().addAll(statusLabel);
-        leftBox.setStyle("-fx-background-color: red; " +
+        leftBox.setStyle("-fx-background-color: #f0d8bf; " +
                 "-fx-alignment: center-left; " +
                 "-fx-padding: 10px; " +
                 "-fx-border-width: 1px; " +
@@ -170,14 +180,27 @@ public class MyApplication extends Application {
                 "-fx-max-width: 10000;");
         statusLabel.setStyle("-fx-text-alignment: left;");
 
-        // Установка свойства растяжения для кнопки
-//        HBox.setHgrow(button, Priority.ALWAYS);
-        button.setStyle("-fx-alignment: center-right;");
+        // Установка свойств для кнопки
+        button.setStyle("-fx-background-color: #1363f5;" +
+                "  -fx-color: #000;" +
+                "  -fx-border: 2px solid #000;" +
+                "  -fx-border-radius: 4px;" +
+                "  -fx-padding: 1px 30px;" +
+                "  -fx-font-size: 16px;" +
+                "  -fx-cursor: pointer;");
+
+        // Добавляем обработчик события нажатия на кнопку, который скрывает statusBox
+        button.setOnAction(event -> {
+
+            // Данный код скрывает statusBox,
+            // отключает управление его размером
+            // и устанавливает привязку высоты WebView к высоте окна PrimaryStage
+            statusBox.setVisible(false);
+            statusBox.setManaged(false);
+            webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty());
+        });
 
         HBox rightBox = new HBox();
-        rightBox.setStyle("-fx-border-color: blue; -fx-border-width: 4px;");
-
-//        HBox.setHgrow(rightBox, Priority.ALWAYS); // Добавляем растяжение по горизонтали
         rightBox.getChildren().addAll(button);
 
         // Добавляем левый и правый ящики в statusBox
@@ -186,10 +209,13 @@ public class MyApplication extends Application {
         // Добавляем WebView и statusBox в главный VBox
         vbox.getChildren().addAll(webView, statusBox);
 
+
+
         // Создаем сцену и связываем ее с primaryStage
         Scene scene = new Scene(vbox);
         primaryStage.setScene(scene);
     }
+
 
 
 
@@ -223,7 +249,9 @@ public class MyApplication extends Application {
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
 
-        statusLabel = new Label("qqqwwq");
+        HBox statusBox = new HBox();
+
+        statusLabel = new Label(" - Пусто - ");
 //        statusLabel.setManaged(false);
 
         // Создаем прогресс-бар спиннер
@@ -247,19 +275,29 @@ public class MyApplication extends Application {
             progressBar.setPrefHeight(newVal.doubleValue());
         });
 
+        Button button = new Button("Х");
+        button.setMaxHeight(Double.MAX_VALUE);
+
         // На главное окно добавляю настроенную главную сцену
         primaryStage.setScene(scene);
 
+        createScene(primaryStage, webView, button, statusLabel, statusBox);
+
+        statusBox.setVisible(false);
+        statusBox.setManaged(false);
+        webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty());
         // ставим прослушку ожидания загрузки страницы
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 Platform.runLater(() -> {
 
                     // Кнопка
-                    Button button = new Button("Кнопка");
-                    button.setMaxHeight(Double.MAX_VALUE);
-                    createScene(primaryStage, webView, button, statusLabel);
 
+
+
+
+
+                    System.out.println(1);
                 });
             }
         });
@@ -273,9 +311,9 @@ public class MyApplication extends Application {
                         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                             String selectedText = (String) webView.getEngine().executeScript("window.getSelection().toString()");
                             String currentUrl = webEngine.getLocation();
-                            statusLabel.setText("Загрузка файла...");
+//                            statusLabel.setText("Загрузка файла...");
                             try {
-                                downloadFile(currentUrl, "C:/Users/Stas/IdeaProjects/untitledTest/target", statusLabel);
+                                downloadFile(currentUrl, System.getProperty("user.home") + "/Downloads", statusLabel, statusBox, primaryStage, webView);
                                 System.out.println("качаю - " + selectedText + " (" + currentUrl + ")");
                             } catch (Exception e){
                                 System.out.println("ERR");
@@ -295,6 +333,7 @@ public class MyApplication extends Application {
         primaryStage.setTitle("Личный кабинет");
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo_desctop.png"))));
         primaryStage.setMaximized(true);
+        System.out.println(primaryStage.getMaxHeight());
         primaryStage.show();
     }
 
