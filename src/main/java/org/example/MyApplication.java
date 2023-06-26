@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -22,12 +21,12 @@ import java.io.*;
 
 import javafx.scene.layout.VBox;
 
-import javax.swing.filechooser.FileSystemView;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MyApplication extends Application {
 
@@ -69,7 +68,7 @@ public class MyApplication extends Application {
     private static void updateProgress(double progress) {
         Platform.runLater(() -> {
             String progressText = String.format("%.2f%%", progress * 100);
-            System.out.println(progressText);
+//            System.out.println(progressText);
         });
     }
 
@@ -134,7 +133,9 @@ public class MyApplication extends Application {
                 inputStream.close();
             } catch (UnsupportedEncodingException e) {
                 System.out.println("errorName");
+
             }
+
         } else {
             throw new IOException("Failed to download file: " + httpConn.getResponseMessage());
         }
@@ -245,6 +246,8 @@ public class MyApplication extends Application {
 
     private void showMainWindow(Stage primaryStage) {
 
+        AtomicReference<String> previousUrl = new AtomicReference<>("");
+
         // Создаем WebView(контейнер) и WebEngine(движок)
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
@@ -290,17 +293,11 @@ public class MyApplication extends Application {
         webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 Platform.runLater(() -> {
-
-                    // Кнопка
-
-
-
-
-
-                    System.out.println(1);
                 });
             }
         });
+
+
 
         // Загружаем ЛК, если есть соединение. Иначе выводим текст ошибки.
         if (isWebsiteAvailable(SIBG_URL)) {
@@ -309,16 +306,35 @@ public class MyApplication extends Application {
                     webView.getEngine().load(SIBG_URL);
                     webView.setOnMouseClicked(event -> {
                         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                            String selectedText = (String) webView.getEngine().executeScript("window.getSelection().toString()");
+
+                            System.out.println("previousUrl "+previousUrl);
+                            System.out.println("getLocation "+webEngine.getLocation());
+
+                            String currentUrl0 = webEngine.getLocation();
+                            // Сохраняем предыдущую ссылку
+
+
+
                             String currentUrl = webEngine.getLocation();
-//                            statusLabel.setText("Загрузка файла...");
+
+                            if (webEngine.getLocation().contains("/file.dat?")) {
+//                                try{webEngine.load(String.valueOf(previousUrl));}catch (Exception ignored){};
+                                webView.getEngine().load(String.valueOf(previousUrl));
+                                System.out.println("String.valueOf(previousUrl) "+String.valueOf(previousUrl));
+                            }else{
+                                previousUrl.set(currentUrl0);
+                            }
+
+
+
+//                            System.out.println(currentUrl);
                             try {
                                 downloadFile(currentUrl, System.getProperty("user.home") + "/Downloads", statusLabel, statusBox, primaryStage, webView);
-                                System.out.println("качаю - " + selectedText + " (" + currentUrl + ")");
                             } catch (Exception e){
-                                System.out.println("ERR");
-                                System.out.println(e);
-                                System.out.println("User clicked the following URL: " + currentUrl);
+
+//                                System.out.println("ERR");
+//                                System.out.println(e);
+//                                System.out.println("User clicked the following URL: " + currentUrl);
                             }
                         }
                     });
@@ -342,7 +358,7 @@ public class MyApplication extends Application {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod("GET");
             int responseCode = connection.getResponseCode();
-            System.out.println(responseCode);
+//            System.out.println(responseCode);
             return responseCode == HttpURLConnection.HTTP_OK;
         } catch (IOException exception) {
             return false;
