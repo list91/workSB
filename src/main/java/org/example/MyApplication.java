@@ -32,7 +32,6 @@ public class MyApplication extends Application {
 
     //    private static final String SIBG_URL = "http://server.sibgroup22.ru:8082/sdesk/hs/lk/";
     private static final String SIBG_URL = "http://server.sibgroup22.ru:2000/SdeskTest1/hs/lk/";
-    //    private static final String SIBG_URL = "https://www.google.com/";
 
     private Label statusLabel;
     private static final String ERROR_CONTENT = """
@@ -135,14 +134,13 @@ public class MyApplication extends Application {
     }
 
 
-    public void createScene(Stage primaryStage, WebView webView, Button button) {
+    public void createScene(Stage primaryStage, WebView webView, Button button, Label statusLabel) {
         // Определяем соотношение размеров
         final double webViewHeightRatio = 0.9;
         final double statusBoxHeightRatio = 0.1;
 
 
-        // Создаем метку для строки состояния и не управляем ею
-        Label statusLabel = new Label("qqqq");
+
 //        statusLabel.setManaged(false);
 
         // Создаем VBox для нашей сцены
@@ -154,8 +152,9 @@ public class MyApplication extends Application {
         statusBox.setAlignment(Pos.CENTER_RIGHT);
         statusBox.setStyle("-fx-background-color: green;");
 
-        // Устанавливаем привязку высоты WebView к высоте primaryStage
+        // Устанавливаем привязку высоты и ширины WebView к высоте и ширине primaryStage
         webView.prefHeightProperty().bind(primaryStage.heightProperty().multiply(webViewHeightRatio));
+        webView.prefWidthProperty().bind(primaryStage.widthProperty());
 
         // Вычисляем высоту statusBox как оставшуюся часть после установки высоты WebView
         double statusBoxHeight = primaryStage.getHeight() * statusBoxHeightRatio;
@@ -165,7 +164,8 @@ public class MyApplication extends Application {
         HBox leftBox = new HBox();
         leftBox.setAlignment(Pos.CENTER_LEFT);
         leftBox.getChildren().addAll(statusLabel);
-        leftBox.setStyle("-fx-background-color: red;");
+        leftBox.setStyle("-fx-margin: 0 " + Double.MAX_VALUE + " 0 0; -fx-background-color: red;");
+//        leftBox.setStyle("-fx-background-color: red;");
 
         HBox rightBox = new HBox();
         rightBox.setAlignment(Pos.CENTER_RIGHT);
@@ -179,6 +179,7 @@ public class MyApplication extends Application {
 
         // Создаем сцену и связываем ее с primaryStage
         Scene scene = new Scene(vbox);
+//        primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
     }
 
@@ -212,9 +213,8 @@ public class MyApplication extends Application {
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
 
-        statusLabel = new Label("qqqq");
-        statusLabel.setManaged(false);
-//        webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty().add(1));
+        statusLabel = new Label("qqqwwq");
+//        statusLabel.setManaged(false);
 
         // Создаем прогресс-бар спиннер
         javafx.scene.control.ProgressIndicator progressBar = new ProgressIndicator();
@@ -248,61 +248,7 @@ public class MyApplication extends Application {
                     // Кнопка
                     Button button = new Button("Кнопка");
                     button.setMaxHeight(Double.MAX_VALUE);
-
-                    createScene(primaryStage, webView, button);
-//                    VBox generalVbox = new VBox();
-//                    generalVbox.setAlignment(Pos.CENTER);
-//
-//                    // Кнопка
-//                    Button button = new Button("Кнопка");
-//                    button.setMaxHeight(Double.MAX_VALUE);
-//
-//                    // Создаем ящик для строки состояния
-//                    HBox statusBox = new HBox();
-//                    statusBox.setAlignment(Pos.CENTER_RIGHT);
-//                    statusBox.setStyle("-fx-background-color: green;");
-//
-//                    // Разбиваем ящик на 2 ящика поменьше
-//                    // ящик слева
-//                    HBox leftBox = new HBox();
-//                    leftBox.setAlignment(Pos.CENTER_LEFT);
-//                    leftBox.setAlignment(Pos.BASELINE_LEFT);
-//                    leftBox.getChildren().addAll(statusLabel);
-//                    leftBox.setStyle("-fx-background-color: red;");
-//                    // ящик справа
-//                    HBox rightBox = new HBox();
-//                    rightBox.setAlignment(Pos.CENTER_RIGHT);
-//                    rightBox.getChildren().addAll(button);
-//
-//                    // добавляем в статусЯщик левый и правый
-//                    statusBox.getChildren().addAll(leftBox, rightBox);
-//
-//                    // Добавляем WebView и статусЯщик в главный ящик
-//                    generalVbox.getChildren().addAll(webView, statusBox);
-//
-//                    // ТЕСТ
-////                    statusLabel.setText("");
-////                    statusLabel.setManaged(false);
-////                    webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty().add(-80));
-//
-//
-//                    // Получаем ссылку на текущую сцену, связанную с основным окном приложения
-//                    Scene webScene = primaryStage.getScene();
-//
-//                    // Устанавливается корневой узел веб-сцены на объект WebView,
-//                    // который представляет загруженную веб-страницу.
-//                    webScene.setRoot(generalVbox);
-//
-//                    // Обновляем текст строки состояния
-//                    statusLabel.setText("Загрузка завершена");
-
-
-//                    webView.setOnMouseClicked(event -> {
-//                        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-//                            webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty().add(-50));
-//
-//                        }
-//                    });
+                    createScene(primaryStage, webView, button, statusLabel);
 
                 });
             }
@@ -313,29 +259,12 @@ public class MyApplication extends Application {
             new Thread(() -> {
                 Platform.runLater(() -> {
                     webView.getEngine().load(SIBG_URL);
-
-
-
-//                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                    alert.setTitle("Information Dialog");
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("This is an example of an information dialog.");
-//
-//                    Button button = new Button("Hover over me");
-//                    Tooltip tooltip = new Tooltip("Hello, World!");
-//                    Tooltip.install(button, tooltip);
-
-
                     webView.setOnMouseClicked(event -> {
                         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-//                            alert.showAndWait();
-                            statusLabel.setManaged(true);
-//                            webView.prefHeightProperty().bind(primaryStage.getScene().heightProperty().add(-150));
+                            statusLabel.setText("fjfjjfjfjfjfjfjfjfjjfjfjfjfjj");
                             String selectedText = (String) webView.getEngine().executeScript("window.getSelection().toString()");
                             String currentUrl = webEngine.getLocation();
-
                             statusLabel.setText("Загрузка файла...");
-
                             try {
                                 downloadFile(currentUrl, "C:/Users/Stas/IdeaProjects/untitledTest/target", statusLabel);
                                 System.out.println("качаю - " + selectedText + " (" + currentUrl + ")");
@@ -344,13 +273,6 @@ public class MyApplication extends Application {
                                 System.out.println(e);
                                 System.out.println("User clicked the following URL: " + currentUrl);
                             }
-
-//// Проверка, что statusLabel не равен null
-//                            if (statusLabel != null) {
-//                                statusLabel.setText("Файл " + file + " успешно загружен!");
-//                            }
-
-
                         }
                     });
 
@@ -361,15 +283,7 @@ public class MyApplication extends Application {
                 webEngine.loadContent(ERROR_CONTENT);
             });
         }
-//        new Thread(() -> {
-//            Platform.runLater(() -> {
-//                webView.getEngine().load(SIBG_URL);
-//            });
-//        }).start();
-
-
         primaryStage.setTitle("Личный кабинет");
-//        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/logo_desktop.png"))));
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/logo_desctop.png"))));
         primaryStage.setMaximized(true);
         primaryStage.show();
