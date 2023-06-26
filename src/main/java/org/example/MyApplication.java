@@ -139,18 +139,14 @@ public class MyApplication extends Application {
         final double webViewHeightRatio = 0.9;
         final double statusBoxHeightRatio = 0.1;
 
-
-
-//        statusLabel.setManaged(false);
-
         // Создаем VBox для нашей сцены
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
 
         // Создаем HBox для строки состояния
         HBox statusBox = new HBox();
-        statusBox.setAlignment(Pos.CENTER_RIGHT);
         statusBox.setStyle("-fx-background-color: green;");
+        statusBox.setAlignment(Pos.CENTER_RIGHT);
 
         // Устанавливаем привязку высоты и ширины WebView к высоте и ширине primaryStage
         webView.prefHeightProperty().bind(primaryStage.heightProperty().multiply(webViewHeightRatio));
@@ -162,13 +158,26 @@ public class MyApplication extends Application {
 
         // Разбиваем statusBox на два HBox поменьше
         HBox leftBox = new HBox();
-        leftBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(leftBox, Priority.ALWAYS); // Добавляем растяжение по горизонтали
         leftBox.getChildren().addAll(statusLabel);
-        leftBox.setStyle("-fx-margin: 0 " + Double.MAX_VALUE + " 0 0; -fx-background-color: red;");
-//        leftBox.setStyle("-fx-background-color: red;");
+        leftBox.setStyle("-fx-background-color: red; " +
+                "-fx-alignment: center-left; " +
+                "-fx-padding: 10px; " +
+                "-fx-border-width: 1px; " +
+                "-fx-border-style: solid; " +
+                "-fx-border-color: black; " +
+                "-fx-min-width: 0; " +
+                "-fx-max-width: 10000;");
+        statusLabel.setStyle("-fx-text-alignment: left;");
+
+        // Установка свойства растяжения для кнопки
+//        HBox.setHgrow(button, Priority.ALWAYS);
+        button.setStyle("-fx-alignment: center-right;");
 
         HBox rightBox = new HBox();
-        rightBox.setAlignment(Pos.CENTER_RIGHT);
+        rightBox.setStyle("-fx-border-color: blue; -fx-border-width: 4px;");
+
+//        HBox.setHgrow(rightBox, Priority.ALWAYS); // Добавляем растяжение по горизонтали
         rightBox.getChildren().addAll(button);
 
         // Добавляем левый и правый ящики в statusBox
@@ -179,9 +188,10 @@ public class MyApplication extends Application {
 
         // Создаем сцену и связываем ее с primaryStage
         Scene scene = new Scene(vbox);
-//        primaryStage.setMaximized(true);
         primaryStage.setScene(scene);
     }
+
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -261,7 +271,6 @@ public class MyApplication extends Application {
                     webView.getEngine().load(SIBG_URL);
                     webView.setOnMouseClicked(event -> {
                         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                            statusLabel.setText("fjfjjfjfjfjfjfjfjfjjfjfjfjfjj");
                             String selectedText = (String) webView.getEngine().executeScript("window.getSelection().toString()");
                             String currentUrl = webEngine.getLocation();
                             statusLabel.setText("Загрузка файла...");
