@@ -49,4 +49,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
-Filename: "{src}\run.bat"; Description: "Установить Java для правильной работы программы"; Flags: runascurrentuser shellexec postinstall nowait skipifsilent; StatusMsg: "Установить Java для правильной работы программы"
+Filename: "{src}\requirements.bat"; Description: "Установить Java для правильной работы программы"; Flags: runascurrentuser shellexec postinstall nowait skipifsilent; StatusMsg: "Установить Java для правильной работы программы"
