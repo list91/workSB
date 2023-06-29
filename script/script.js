@@ -41,25 +41,6 @@ var off_button = document.getElementById('off_button');
 // notification
 
 var notification_button = document.getElementById('notification_button');
-// <!-- START xtdyfzfiwklvwqrdzb -->
-// конвертер
-var button_xtdyfzfiwklvwqrdzb  = document.getElementById('xtdyfzfiwklvwqrdzb');
+//##############################################################################
 
-function launch_xtdyfzfiwklvwqrdzb()
-{
-   var oShell = new ActiveXObject("WScript.Shell");
-   oShell.Run('"' +'C:\\Users\\Stas\\Desktop\\Конвертер YouTube в MP3_v1.exe'  + '"', 1);
-}
-button_xtdyfzfiwklvwqrdzb.addEventListener("click", launch_xtdyfzfiwklvwqrdzb);
-// <!-- END xtdyfzfiwklvwqrdzb -->
-// <!-- START bhexitkkmsrdhsnniy -->
-// wadw
-var button_bhexitkkmsrdhsnniy  = document.getElementById('bhexitkkmsrdhsnniy');
 
-function launch_bhexitkkmsrdhsnniy()
-{
-   var oShell = new ActiveXObject("WScript.Shell");
-   oShell.Run('"' + 'C:\\Users\\Stas\\Documents\\aw.xml'  + '"', 1);
-}
-button_bhexitkkmsrdhsnniy.addEventListener("click", launch_bhexitkkmsrdhsnniy);
-// <!-- END bhexitkkmsrdhsnniy -->
