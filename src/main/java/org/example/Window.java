@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Window extends Application {
 
     final public String html = "terminal.hta";
+    final public String scripts = "script/script.js";
     private Map<String, Boolean> checkedStateMap = new HashMap<>();
     public static void main(String[] args) {
         launch(args);
@@ -88,8 +89,17 @@ public class Window extends Application {
             // Выводим список названий
             for (String item : selectedItems) {
                 System.out.println(item);
+                DelElem delElem = new DelElem();
 
+                // находим id по тексту
+                String id = findElem.getIdInTag(html,item);
+
+                // удаляем найденный
+                delElem.deleteElement(html,html,id, scripts);
             }
+            primaryStage.close();
+            Stage stage = new Stage();
+            start(stage);
         });
 
 
