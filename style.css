@@ -71,7 +71,8 @@ body {
 }
 
 .icon {
-  width: 80px;
+  max-width: 150px;
+  max-height: 110px;
 }
 
 .prog_title {
@@ -86,6 +87,6 @@ body {
 
 .icon {
   width: 150px;
-  height: 100%; /* Ширина иконки */
+  height: 110px; /* Ширина иконки */
   margin-right: 10px; /* Отступ между иконкой и текстом */
 }
