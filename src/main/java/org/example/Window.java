@@ -58,43 +58,7 @@ public class Window extends Application {
         button1.setOnAction(event -> {
             createNewWindow(primaryStage);
         });
-        class CustomListItem extends HBox {
-            private final String value;
 
-            public CustomListItem(String value) {
-                this.value = value;
-
-                Label label = new Label(value);
-
-                Region spacer = new Region(); // Пустая упругая область
-                HBox.setHgrow(spacer, Priority.ALWAYS); // Растяжение области
-
-                Button button1 = new Button("картинка");
-                Button button2 = new Button("текст");
-
-                button1.setOnAction(event -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Выберите файл");
-                    File selectedFile = fileChooser.showOpenDialog(primaryStage);
-                    if (selectedFile != null) {
-                        System.out.println("Выбран файл: " + selectedFile.getAbsolutePath());
-                        // ЗДЕСЬ ЗАДАЕМ НОВУЮ КАРТИНКУ
-                    }
-                    label.setText("ййййййййй");
-                });
-
-                button2.setOnAction(event -> {
-                    label.setText("ййййййййй");
-                });
-
-                this.getChildren().addAll(label, spacer, button1, button2);
-                this.setSpacing(10);
-            }
-
-            public String getValue() {
-                return value;
-            }
-        }
 
 
 
@@ -108,11 +72,12 @@ public class Window extends Application {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    CustomListItem listItem = new CustomListItem(item);
+                    CustomListItem listItem = new CustomListItem(item, primaryStage);
                     setGraphic(listItem);
                 }
             }
         });
+
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -137,6 +102,7 @@ public class Window extends Application {
 
         button4.setOnAction(event -> {
             newStage.close();
+            closeAndOpen(primaryStage);
         });
         // Создание текстового поля
         TextField textField = new TextField();
@@ -162,7 +128,7 @@ public class Window extends Application {
 //                System.out.println("Текстовое поле: " + inputText);
                 AddElem addElem = new AddElem();
                 addElem.addElem(html, html, text.get(), inputText);
-                newStage.close();
+                closeAndOpen(primaryStage);
                 createNewWindow(primaryStage);
 
             } else {
@@ -177,10 +143,9 @@ public class Window extends Application {
 
         newStage.setOnCloseRequest(event -> {
             // Код скрипта, который нужно выполнить при закрытии окна
-            primaryStage.close();
-            primaryStage.show();
-            // Дополнительный код скрипта...
+            closeAndOpen(primaryStage);
         });
+
 
 
         // Создание сетки для размещения элементов
@@ -210,8 +175,50 @@ public class Window extends Application {
         newStage.setScene(newScene);
         newStage.showAndWait();
     }
+    public void closeAndOpen(Stage primaryStage){
+        primaryStage.close();
+        Stage stage = new Stage();
+        start(stage);
+    }
 
 
 
 
+}
+class CustomListItem extends HBox {
+    private final String value;
+
+    public CustomListItem(String value, Stage primaryStage) {
+        this.value = value;
+
+        Label label = new Label(value);
+
+        Region spacer = new Region(); // Пустая упругая область
+        HBox.setHgrow(spacer, Priority.ALWAYS); // Растяжение области
+
+        Button button1 = new Button("картинка");
+        Button button2 = new Button("текст");
+
+        button1.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Выберите файл");
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            if (selectedFile != null) {
+                System.out.println("Выбран файл: " + selectedFile.getAbsolutePath());
+                // ЗДЕСЬ ЗАДАЕМ НОВУЮ КАРТИНКУ
+            }
+            label.setText("ййййййййй");
+        });
+
+        button2.setOnAction(event -> {
+            label.setText("ййййййййй");
+        });
+
+        this.getChildren().addAll(label, spacer, button1, button2);
+        this.setSpacing(10);
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
