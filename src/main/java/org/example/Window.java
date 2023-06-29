@@ -12,7 +12,9 @@ import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Window extends Application {
@@ -29,10 +31,11 @@ public class Window extends Application {
         // Создание кнопок
         Button button1 = new Button("Добавить");
         Button button2 = new Button("Выбрать на удаление");
+        Button button3 = new Button("Запустить терминал");
 
         // Создание панели для кнопок
         HBox buttonsPane = new HBox();
-        buttonsPane.getChildren().addAll(button1, button2);
+        buttonsPane.getChildren().addAll(button1, button2, button3);
         buttonsPane.setSpacing(10);
 
         // Создание элемента управления для отображения текста
@@ -59,8 +62,22 @@ public class Window extends Application {
             createNewWindow(primaryStage);
         });
 
+        button3.setOnAction(event -> {
+            File file = new File("terminal.hta");
 
-
+            // Проверка поддержки операционной системой открытия файла
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.OPEN)) {
+                    try {
+                        // Открытие файла
+                        desktop.open(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         // Конвертируем список строк в список пользовательских элементов
         listView.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
@@ -86,6 +103,7 @@ public class Window extends Application {
     }
     private void createNewWindow(Stage primaryStage) {
         AtomicReference<String> text = new AtomicReference<>("");
+        AtomicReference<String> app = new AtomicReference<>("");
 
         Stage newStage = new Stage();
         newStage.setTitle("Добавить элемент");
@@ -107,6 +125,17 @@ public class Window extends Application {
         // Создание текстового поля
         TextField textField = new TextField();
 
+        // APP
+        button1.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Выберите исполняемый файл");
+            File selectedFile = fileChooser.showOpenDialog(newStage);
+            if (selectedFile != null) {
+                System.out.println("Выбран файл: " + selectedFile.getAbsolutePath());
+                app.set(selectedFile.getAbsolutePath());
+            }
+        });
+
         // картинка
         button2.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -121,14 +150,14 @@ public class Window extends Application {
         button3.setOnAction(event -> {
             String inputText = textField.getText();
 
-            if (text.get() != null && !text.get().isEmpty() && inputText != null && !inputText.isEmpty()) {
+            if (text.get() != null && !text.get().isEmpty() && inputText != null && !inputText.isEmpty() && app.get() != null && !app.get().isEmpty()) {
                 // Здесь выполняйте необходимые действия, если все поля заполнены
 //                System.out.println("Значения полей: ");
 //                System.out.println("Выбран файл: " + text.get());
 //                System.out.println("Текстовое поле: " + inputText);
                 AddElem addElem = new AddElem();
-                addElem.addElem(html, html, text.get(), inputText);
-                closeAndOpen(primaryStage);
+                addElem.addElem(html, html, text.get(), inputText, app.get());
+                newStage.close();
                 createNewWindow(primaryStage);
 
             } else {
