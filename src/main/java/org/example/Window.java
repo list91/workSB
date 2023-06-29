@@ -4,22 +4,26 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView; // Импортируем класс ListView
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.util.List;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Window extends Application {
 
     final public String html = "terminal.hta";
+    private Map<String, Boolean> checkedStateMap = new HashMap<>();
     public static void main(String[] args) {
         launch(args);
     }
@@ -44,7 +48,6 @@ public class Window extends Application {
         FindElem findElem = new FindElem();
 
         // Создание списка со строковыми значениями
-//        String html = "terminal.hta";
         ListView<String> listView = findElem.getAll(html);
 
         // Создание панели для контента с внутренней границей
@@ -78,6 +81,17 @@ public class Window extends Application {
                 }
             }
         });
+        button2.setOnAction(event -> {
+            // Получаем отмеченные элементы
+            List<String> selectedItems = listView.getItems().filtered(item -> checkedStateMap.getOrDefault(item, false));
+
+            // Выводим список названий
+            for (String item : selectedItems) {
+                System.out.println(item);
+
+            }
+        });
+
 
         // Конвертируем список строк в список пользовательских элементов
         listView.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
@@ -90,10 +104,22 @@ public class Window extends Application {
                     setGraphic(null);
                 } else {
                     CustomListItem listItem = new CustomListItem(item, primaryStage);
+                    listItem.getCheckBox().setSelected(itemIsChecked(item)); // Устанавливаем состояние флажка
                     setGraphic(listItem);
+
+                    // Обработчик изменения состояния флажка
+                    listItem.getCheckBox().selectedProperty().addListener((observable, oldValue, newValue) -> {
+                        checkedStateMap.put(item, newValue);
+                    });
                 }
             }
+
+            private boolean itemIsChecked(String item) {
+                return checkedStateMap.getOrDefault(item, false);
+            }
         });
+
+
 
 
         Scene scene = new Scene(root);
@@ -216,6 +242,7 @@ public class Window extends Application {
 }
 class CustomListItem extends HBox {
     private final String value;
+    private CheckBox checkBox;
 
     public CustomListItem(String value, Stage primaryStage) {
         this.value = value;
@@ -227,6 +254,9 @@ class CustomListItem extends HBox {
 
         Button button1 = new Button("картинка");
         Button button2 = new Button("текст");
+
+        checkBox = new CheckBox();
+        HBox.setHgrow(checkBox, Priority.NEVER);
 
         button1.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -243,11 +273,15 @@ class CustomListItem extends HBox {
             label.setText("ййййййййй");
         });
 
-        this.getChildren().addAll(label, spacer, button1, button2);
+        this.getChildren().addAll(label, spacer, button1, button2, checkBox);
         this.setSpacing(10);
     }
 
     public String getValue() {
         return value;
+    }
+
+    public CheckBox getCheckBox() {
+        return checkBox;
     }
 }
