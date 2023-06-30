@@ -18,7 +18,7 @@ public class AddElem {
             String start = "<!-- START " + id + " -->";
             String end = "<!-- END " + id + " -->\n<!-- ADD ELEMENT -->";
             String maket = "<div id='"+ id +"' class=\"cell grid__item\">\n" +
-                                    "<img class=\"icon\" src='"+srcImg+"'>\n" +
+                                    "<img class=\"icon\" src=\""+srcImg+"\">\n" +
                                     "<div class=\"prog_title\">"+content+"</div>\n</div>";
             maket = start + "\n" + maket + "\n" + end;
 
